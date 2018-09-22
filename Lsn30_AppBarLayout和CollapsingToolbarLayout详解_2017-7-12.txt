@@ -1,0 +1,97 @@
+今日课题 ：FloatingActionButton ，CoordinatorLayout，AppBarLayout，CollapsingToolbarLayout  使用 
+
+FloatingActionButton 悬浮按钮
+Floating Action Button，简称FAB，作为材料设计中（众多）独特的UI元素之一
+，用于特定场景中基本或有推动等作用的行为中。因为在指定屏幕中
+，会被频繁的访问（译者注：如点击，触摸等），所以，我认为正确处理FAB的每一个细节是件很重要的事情。
+
+然而，有很多应用，并没有以材料设计指导为规范，从而错误的使用着FAB，当然，这也包括一些谷歌的自家应用（我就知道！）。
+
+  ● app:backgroundTint - 设置FAB的背景颜色。
+  
+  ● app:rippleColor - 设置FAB点击时的背景颜色。
+  
+  ● app:borderWidth - 该属性尤为重要，如果不设置0dp，那么在4.1的sdk上FAB会显示为正方形，而且在5.0以后的sdk没有阴影效果。所以设置为borderWidth="0dp"。
+  
+  ● app:elevation - 默认状态下FAB的阴影大小。
+  
+  ● app:pressedTranslationZ - 点击时候FAB的阴影大小。
+  
+  ● app:fabSize - 设置FAB的大小，该属性有两个值，分别为normal和mini，对应的FAB大小分别为56dp和40dp。
+  
+  ● src - 设置FAB的图标，Google建议符合Design设计的该图标大小为24dp。
+  
+  ● app:layout_anchor - 设置FAB的锚点，即以哪个控件为参照点设置位置。
+  ● app:layout_anchorGravity - 设置FAB相对锚点的位置，值有 bottom、center、right、left、top等。
+  
+  ======================================CoordinatorLayout=====================================================
+  
+  
+  
+  1、作为顶层布局 
+  2、调度协调子控件
+  
+  1. 作为顶层应用的装饰或者chrome的布局； 
+2. 作为一个能响应特定的一个或多个子视图交互的容器。
+
+
+通过对CoordinatorLayout子视图进行Behaviors的声明，你可以向这些子视图提供许多不同的和其父视图以及和其他子视图的交互方法。View类可以通过注释一个DefaultBehavior来声明一个behavior作为CoordinatorLayout子视图的系统默认behavior。
+Behaviors可以用于实现各种交互和附加布局的变化，包括图片和面板的滑动，点击会消失元素和按钮等等的行为都可以依赖于其他子视图的变化而变化。 
+一个CoordinatorLayout的子视图可能有一个achor，该子视图的id必须对应任意一个CoordinatorLayout的后代，但是这个子视图不一定是CoordinatorLayout固定的子视图或者这个子视图的后代。
+子视图可以通过重写insetEdge来描述布局如何协调该子视图。 
+任何子视图都将通过dodgeInsetEdges被适当地移动，保证相互不重叠。
+
+
+
+FloatingButtonBehavior  Gone掉之后  不能继续得到回调
+
+
+========================AppBarLayout======================================
+
+
+   当我们向上滚动可滚动View时，ToolBar会消失；
+   当我们再向下滚动可滚动View时，ToolBar又会随之出现。
+   这就是一个简单地scrolling gesture的示例。实际上，ToolBar本身可没有这个能耐，
+   我们通过为它包上一层AppBarLayout，
+   并为ToolBar指定一个滚动行为，就能够让ToolBar随着下面的可滚动View的滚动而发生滚动。可滚动View也就是我们上面提到的scrolling view。
+   
+   ToolBar  
+   滚动控件
+   
+   AppBarLayout是一个垂直的LinearLayout，实现了Material Design中app bar的scrolling gestures特性。
+   AppBarLayout的子View应该声明想要具有的“滚动行为”，这可以通过layout_scrollFlags属性或是setScrollFlags()方法来指定。
+   AppBarLayout只有作为CoordinatorLayout的直接子View时才能正常工作，为了让AppBarLayout能够知道何时滚动其子View，
+   我们还应该在CoordinatorLayout布局中提供一个可滚动View，
+   我们称之为scrolling view。scrolling view和AppBarLayout之间的关联，通过将scrolling view的Behavior设为AppBarLayout.ScrollingViewBehavior来建立。
+
+==========scroll=======
+scroll 设成这个值的效果就好比本View和scrolling view是“一体”的。
+为了其他的滚动行为生效，必须同时指定scroll和相应的标记
+，比如我们想要exitUntilCollapsed所表现的滚动行为
+必须将layout_scrollFlags指定为“scroll|exitUntilCollapsed”。
+
+
+=========exitUntilCollapsed======
+ 当本View离开屏幕时，会被“折叠”直到达到其最小高度。我们可以这样理解这个效果：当我们开始向上滚动scrolling view时，
+ 本View会先接管滚动事件，这样本View会先进行滚动，直到滚动到了最小高度（折叠了）
+ ，scrolling view才开始实际滚动。而当本View已完全折叠后，再向下滚动scrolling view，
+ 直到scrolling view顶部的内容完全显示后，本View才会开始向下滚动以显现出来。
+ 
+==============enterAlwaysCollapsed=====================
+最开始动的是toolbar  
+snap 在一次滚动结束时，本View很可能只处于“部分显示”的状态
+，加上这个标记能够达到“要么完全隐藏，要么完全显示”的效果。 到了这里，
+
+
+  ● exitUntilCollapsed - 向上滚动时收缩View，但可以固定Toolbar一直在上面。
+
+
+=============================CollapsingToolbarLayout==============================================================
+
+
+
+
+
+
+
+
